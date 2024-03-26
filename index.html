@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Register Application</title>
+<style>
+   body {
+       font-family: Arial, sans-serif;
+   }
+   input {
+       margin-bottom: 15px;
+       width: 200px;
+   
+}
+
+</style>
+</head>
+<body>
+<h2>Cash Register</h2>
+<label for="totalCost">Total Cost:</label>
+<input type="number" id="totalCost" step="0.01" placeholder="Enter total cost">
+<label for="amountProvided">Amount Provided:</label>
+<input type="number" id="amountProvided" step="0.01" placeholder="Enter amount provided">
+<button onclick="calculateChange()">Calculate Change</button>
+<div id="changeOutput"></div>
+
+<script>
+       function calculateChange() {
+           const totalCost = parseFloat(document.getElementById("totalCost").value);
+           const amountProvided = parseFloat(document.getElementById("amountProvided").value);
+           let change = amountProvided - totalCost; //calculation of amount provided - total cost
+           let changeOutput = document.getElementById("changeOutput")
+           changeOutput.innerHTML = "Change: $" + change; //output change
+
+           const denominations = [100, 50, 20, 10, 5, 1, 0.25, 0.1, 0.05, 0.01];
+           const denominationsNames = ["$100 bill","$50 bill","$20 bill", "$10 bill", "$5 bill", "$1 bill", "quarter", "dime", "nickel", "penny"]; //denomination of cent and dollars
+           let counts = {};
+           denominations.forEach((denomination, index) => {
+               let count = Math.floor(change / denomination);
+               if (count > 0) {
+                   counts[denominationsNames[index]] = count;
+                   change -= count * denomination;
+               }
+           });
+           Object.keys(counts).forEach(key => {
+               changeOutput.innerHTML += `<p>${counts[key]} ${key}${counts[key] > 1 ? 's' : ''}</p>`;
+           });
+       }
+</script>
+</body>
+</html>
